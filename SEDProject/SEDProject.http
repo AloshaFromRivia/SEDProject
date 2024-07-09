@@ -1,0 +1,82 @@
+@SEDProject_HostAddress = http://localhost:5220
+
+@FirstName = Alexey
+@LastName = Ivanov
+@Email = testsubject@mail.com
+@Age = 2002
+@Month = 4
+@Day = 17
+
+@UserGuid = 1D09A6DB-AE2D-4BA0-9B31-B3572BEC45B8
+@DepartmentGuid = 8513BCC1-341B-48CA-98A9-83D4E6A11364
+
+@DepartmentName = Head of Division
+@DepartmentDescription = Head of our Company
+
+
+# Arrange
+
+POST {{SEDProject_HostAddress}}/api/User/
+Accept: application/json
+
+{
+  Id = {{UserGuid}}
+  FirstName = {{FirstName}}
+  LastName = {{LastName}}
+  Email = {{Email}}
+  Age = {{Age}}
+  Month = {{Month}}
+  Day = {{Day}}
+}
+###
+
+POST {{SEDProject_HostAddress}}/api/Departments/
+Accept: application/json
+
+{
+  Id = {{DepartmentGuid}}
+  Name = {{DepartmentName}}
+  Description = {{DepartmentDescription}}
+}
+###
+
+POST {{SEDProject_HostAddress}}/api/Participant/
+Accept: application/json
+
+{
+  Id = {{DepartmentGuid}}
+  UserId = {{UserGuid}}
+  DepartmentId = {{DepartmentGuid}}
+}
+### 
+
+# Check new db rows
+  
+GET {{SEDProject_HostAddress}}/api/User/{{UserGuid}}
+Accept: application/json
+###
+
+GET {{SEDProject_HostAddress}}/api/Departments/{{DepartmentGuid}}
+Accept: application/json
+###
+
+GET {{SEDProject_HostAddress}}/api/Participant/getAll
+Accept: application/json
+###
+
+
+
+@StartDate = 2024-01-07T17:03:08.9450312
+@EndDate = 2024-11-07T17:03:08.9450312
+
+# Get users filtered by date
+GET {{SEDProject_HostAddress}}/api/Participant/getWithDate?startDate={{StartDate}}&endDate={{EndDate}}
+Accept: application/json
+###
+
+@ParticipantId = {{$guid}}
+
+#Transfer user to another department
+POST {{SEDProject_HostAddress}}/api/Participant/transfer?participantId={{ParticipantId}}&depId={{DepartmentGuid}}
+Accept: application/json
+###

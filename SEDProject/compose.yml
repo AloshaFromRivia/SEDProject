@@ -1,0 +1,14 @@
+﻿# docker-compose.yml
+# https://docs.docker.com/compose/compose-file/compose-file-v3/
+version: "3.8"
+services:
+  mssql:
+    container_name: db_mssql
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: always
+    ports:
+      - '1433:1433'
+    environment:
+      ACCEPT_EULA: 'Y'
+      SA_PASSWORD: '!12345Qwerty'
+      MSSQL_PID: 'Express'
